@@ -35,7 +35,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: IRYekan, serif}
 <header dir="rtl" class="w3-container w3-red w3-center" style="padding:128px 16px">
   <h1 class="w3-margin w3-jumbo">آزمون پایانترم درس شیمی</h1>
   {% if user.is_authenticated %}
-    <p class="w3-xlarge">{{user.username}} عزیز خوش آمدی.</p>
+    <p class="w3-xlarge">{{user.name}} عزیز خوش آمدی.</p>
   {% else %}
     <p class="w3-xlarge">ابتدا وارد شوید.</p>
   {% endif %}
