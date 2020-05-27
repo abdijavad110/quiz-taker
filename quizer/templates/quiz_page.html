@@ -24,10 +24,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: IRYekan, serif}
 
   <!-- Navbar on small screens -->
   <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-large">
-    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 4</a>
+<!--    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>-->
+<!--    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>-->
+<!--    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>-->
+<!--    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 4</a>-->
   </div>
 </div>
 
@@ -49,22 +49,29 @@ body,h1,h2,h3,h4,h5,h6 {font-family: IRYekan, serif}
       <div class="w3-content">
           <h1>سوال {{ i }}:</h1>
           <h5 class="w3-padding-32">{{ q }}</h5>
-          <img width=100% height=auto src= {{ p }}>
-
+          {% if p %}
+            <img width=100% height=auto src= {{ p }}>
+          {% endif %}
 <!--          todo find a way to show previous uploaded files.    -->
+          {% if anses %}
+            <label class="w3-small">پاسخ‌های آپلود شده:</label>
+            {% for ans_n, ans_id, ans_path in anses %}
+              <form method="post" action="delete">{% csrf_token %}
+                <input alt="حذف این پاسخ" type="submit" class="w3-button w3-circle w3-red w3-small" value="X">
+                  <label class="w3-small"><a href={{ ans_path }}> پاسخ {{ ans_n }}</a></label>
+                <input type="hidden" name="ans_id" value={{ ans_id }}>
+              </form>
+            {% endfor %}
+          {% endif %}
 
-          {% for ans_n, ans_id in anses %}
-            <form method="post" action="delete">
-
-            </form>
-          {% endfor %}
+          <br>
 
           <form method="post" enctype="multipart/form-data" action="upload">{% csrf_token %}
             <input type="hidden" name="question" value={{ qi }}>
-            <label for="file">افزودن پاسخ جدید</label>
-            <br><br>
+            <label for="file" class="w3-small">افزودن پاسخ جدید:</label>
+            <br>
             <input type="file" id="file" name="answer" multiple>
-            <input class="w3-red w3-button" type="submit" value="ثبت پاسخ">
+            <input class="w3-green w3-button" type="submit" value="ثبت پاسخ">
           </form>
 
       </div>

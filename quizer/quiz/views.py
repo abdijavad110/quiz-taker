@@ -9,6 +9,9 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 def index(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
     questions = Question.objects.all()
     questions = [(
         pers(str(i + 1)),
@@ -17,9 +20,9 @@ def index(request):
         ("w3-light-grey" if i % 2 else ""),
         q.id,
         [
-            (ans.file.name, ans.id)
-            for ans in
-            Answer.objects.filter(responder=request.user, question=q.id).all()
+            (i+1, ans.id, ans.file.url)
+            for i, ans in
+            enumerate(Answer.objects.filter(responder=request.user, question=q.id).all())
         ]
         ) for i, q in enumerate(questions)]
     context = {'questions': questions}
@@ -39,10 +42,17 @@ def upload(request):
         if file is not None:
             ans = Answer()
             ans.file = file
+            ans.file.name = str(user.id) + "_" + ans.file.name
             ans.question = Question.objects.get(id=question)
             ans.responder = user
             ans.save()
 
-        return redirect('/')
-    else:
-        return redirect('/')
+    return redirect('/')
+
+
+def delete(request):
+    if request.method == 'POST':
+        ans_id = request.POST['ans_id']
+        Answer.objects.filter(id=ans_id).delete()
+
+    return redirect('/')
