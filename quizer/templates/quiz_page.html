@@ -35,7 +35,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: IRYekan, serif}
 <header dir="rtl" class="w3-container w3-red w3-center" style="padding:128px 16px">
   <h1 class="w3-margin w3-jumbo">آزمون پایانترم درس شیمی</h1>
   {% if user.is_authenticated %}
-    <p class="w3-xlarge">{{user.name}} عزیز خوش آمدی.</p>
+    <p class="w3-xlarge">{{user.first_name}} عزیز خوش آمدی.</p>
   {% else %}
     <p class="w3-xlarge">ابتدا وارد شوید.</p>
   {% endif %}
@@ -52,7 +52,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: IRYekan, serif}
           {% if p %}
             <img width=100% height=auto src= {{ p }}>
           {% endif %}
-          <br><br>
+          <br><br><br>
           {% if anses %}
             <label class="w3-small">پاسخ‌های آپلود شده:</label>
             {% for ans_n, ans_id, ans_path in anses %}
