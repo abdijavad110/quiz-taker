@@ -48,10 +48,11 @@ body,h1,h2,h3,h4,h5,h6 {font-family: IRYekan, serif}
     <div class={{ c }}>
       <div class="w3-content">
           <h1 class="w3-xxlarge">سوال {{ i }}:</h1>
-          <h5 class="w3-padding-32">{{ q }}</h5>
+          <h5 class="w3-padding-4">{{ q }}</h5>
           {% if p %}
             <img width=100% height=auto src= {{ p }}>
           {% endif %}
+          <br><br>
           {% if anses %}
             <label class="w3-small">پاسخ‌های آپلود شده:</label>
             {% for ans_n, ans_id, ans_path in anses %}
