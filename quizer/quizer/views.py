@@ -62,5 +62,38 @@ def signup(request):
 
 
 def logout(request):
-    auth_logout(request)
+    if request.user.is_authenticated:
+        auth_logout(request)
     return redirect('/')
+
+
+def profile(request):
+
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+    else:
+        user = User.objects.get(id=request.user.id)
+
+    if request.method == 'POST':
+        f_name = request.POST['f_name']
+        l_name = request.POST['l_name']
+
+        if f_name == "" or l_name == "":
+            return render(request, 'registration/profile.html',
+                          {'errors': ["نام و نام‌خانوادگی نباید خالی باشند."],
+                           'names': {
+                           'f_name': user.first_name,
+                           'l_name': user.last_name
+                           }})
+
+        user.first_name = f_name
+        user.last_name = l_name
+        user.save()
+        return redirect('/')
+    else:
+        return render(request, 'registration/profile.html',
+                      {'errors': [],
+                       'names': {
+                           'f_name': user.first_name,
+                           'l_name': user.last_name
+                       }})
