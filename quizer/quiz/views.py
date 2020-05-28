@@ -19,13 +19,13 @@ def index(request):
         (q.pic.url if q.pic.name != '' else ''),
         ("w3-light-grey" if i % 2 else ""),
         q.id,
-        [
-            (i+1, ans.id, ans.file.url)
-            for i, ans in
-            enumerate(Answer.objects.filter(responder=request.user, question=q.id).all())
-        ]
         ) for i, q in enumerate(questions)]
-    context = {'questions': questions}
+    answers = [
+        (i + 1, ans.id, ans.file.url)
+        for i, ans in
+        enumerate(Answer.objects.filter(responder=request.user).all())
+    ]
+    context = {'questions': questions, 'answers': answers}
     return render(request, 'quiz_page.html', context)
 
 
