@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Question
+from .models import Question, Assignments
 from persian import convert_en_numbers as pers
 from .forms import AnswerForm
 from .models import Answer
@@ -12,7 +12,7 @@ def index(request):
     if not request.user.is_authenticated:
         return redirect('login')
 
-    questions = Question.objects.all()
+    questions = Assignments.objects.get(user=request.user.id).questions.all()
     questions = [(
         pers(str(i + 1)),
         q.text,

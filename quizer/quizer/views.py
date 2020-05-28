@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate, logout as auth_logout
-from ..quiz.models import Assignments, Question
+from quiz.models import Assignments, Question
 from random import choice, shuffle
 
 
@@ -59,17 +59,17 @@ def signup(request):
             user.first_name = f_name
             user.save()
 
-            # _assign_questions(user.id)
+            _assign_questions(user.id)
             auth_login(request, user)
             return redirect('/')
     return render(request, 'registration/signup.html', {'errors': errors})
 
 
 def _assign_questions(user_id):
-    assignment = Assignments(user=user_id)
+    assignment = Assignments(user=User.objects.get(id=user_id))
     assignment.save()
 
-    types = list(range(101, 114))
+    types = list(range(10, 13))
     shuffle(types)
 
     for i in types:
