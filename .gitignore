@@ -1,3 +1,4 @@
 /quizer/media/
 /quizer/quiz/migrations/
 /quizer/db.sqlite3
+/quizer/controller/migrations/

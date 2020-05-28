@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Question, Answer
+from .models import Question, Answer, Assignments
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -10,6 +10,11 @@ class AnswerAdmin(admin.ModelAdmin):
     list_display = ('responder', 'file', 'time')
 
 
+class AssignAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+
+
 # Register your models here.
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer, AnswerAdmin)
+admin.site.register(Assignments, AssignAdmin)

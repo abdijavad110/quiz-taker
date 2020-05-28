@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from .models import Question, Assignments
 from persian import convert_en_numbers as pers
-from .conf import START_TIME, STOP_TIME
+from .conf import get_time
 from .models import Answer
 from datetime import datetime
 
 
 # Create your views here.
 def index(request):
+    START_TIME, STOP_TIME = get_time()
     if not request.user.is_authenticated:
         return redirect('login')
 
@@ -38,6 +39,7 @@ def index(request):
 
 
 def upload(request):
+    START_TIME, STOP_TIME = get_time()
     if datetime.now() > STOP_TIME:
         return render(request, 'late.html')
 
@@ -60,6 +62,7 @@ def upload(request):
 
 
 def delete(request):
+    START_TIME, STOP_TIME = get_time()
     if datetime.now() > STOP_TIME:
         return render(request, 'late.html')
 

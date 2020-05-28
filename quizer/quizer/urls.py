@@ -15,4 +15,5 @@ urlpatterns = [
                   path('signup/', signup, name='signup'),
                   path('logout/', logout, name='logout'),
                   path('profile/', profile, name='profile'),
+                  path('control/', include('controller.urls')),
               ] + static('/media', document_root=settings.MEDIA_ROOT)
