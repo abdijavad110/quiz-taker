@@ -45,6 +45,13 @@
         <!--        <div class="w3-border-green w3-rightbar w3-panel">-->
         <form class="w3-container" method="post" action="/signup/">{% csrf_token %}
             <div class="w3-margin">
+                {% if errors %}
+                {% for err in errors %}
+                <h6 class="w3-text-red">* {{ err }}</h6>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="w3-margin">
                 <label>نام کاربری:</label>
                 <input class="w3-input w3-border" type="text" name="username">
             </div>
