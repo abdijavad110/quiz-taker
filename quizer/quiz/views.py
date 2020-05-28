@@ -1,16 +1,24 @@
 from django.shortcuts import render, redirect
 from .models import Question, Assignments
 from persian import convert_en_numbers as pers
-from .forms import AnswerForm
+from .conf import START_TIME, STOP_TIME
 from .models import Answer
-from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from datetime import datetime
 
 
 # Create your views here.
 def index(request):
     if not request.user.is_authenticated:
         return redirect('login')
+
+    if datetime.now() < START_TIME:
+        diff = START_TIME - datetime.now()
+        diff = int(diff.total_seconds())
+        minutes = diff // 60
+        seconds = diff % 60
+        return render(request, 'soon.html', {'min': minutes, 'sec': seconds})
+    elif datetime.now() >= STOP_TIME:
+        return render(request, 'late.html')
 
     questions = Assignments.objects.get(user=request.user.id).questions.all()
     questions = [(
@@ -30,6 +38,9 @@ def index(request):
 
 
 def upload(request):
+    if datetime.now() > STOP_TIME:
+        return render(request, 'late.html')
+
     if request.method == 'POST':
         user = request.user
         file = None
@@ -49,6 +60,9 @@ def upload(request):
 
 
 def delete(request):
+    if datetime.now() > STOP_TIME:
+        return render(request, 'late.html')
+
     if request.method == 'POST':
         ans_id = request.POST['ans_id']
         Answer.objects.filter(id=ans_id).delete()
