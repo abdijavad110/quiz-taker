@@ -14,3 +14,8 @@ class Answer(models.Model):
     file = models.FileField(upload_to="answers")
     time = models.DateTimeField(auto_now=True)
     responder = models.ForeignKey(User, models.CASCADE)
+
+
+class Assignments(models.Model):
+    user = models.ForeignKey(User, models.CASCADE)
+    questions = models.ManyToManyField(Question)
