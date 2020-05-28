@@ -11,5 +11,4 @@ class Question(models.Model):
 
 class Answer(models.Model):
     file = models.FileField(upload_to="answers")
-    question = models.ForeignKey(Question, models.CASCADE)
     responder = models.ForeignKey(User, models.CASCADE)

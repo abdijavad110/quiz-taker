@@ -88,7 +88,6 @@
 
         <div class="w3-border-green w3-rightbar w3-panel">
             <form method="post" enctype="multipart/form-data" action="upload">{% csrf_token %}
-                <input type="hidden" name="question" value={{ qi }}>
                 <label for="file" class="w3-large">افزودن پاسخ جدید:</label>
                 <br>
                 <input type="file" id="file" name="answer" multiple>

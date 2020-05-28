@@ -37,13 +37,11 @@ def upload(request):
             file = request.FILES['answer']
         except KeyError:
             pass
-        question = request.POST['question']
 
         if file is not None:
             ans = Answer()
             ans.file = file
             ans.file.name = str(user.id) + "_" + ans.file.name
-            ans.question = Question.objects.get(id=question)
             ans.responder = user
             ans.save()
 
