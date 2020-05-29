@@ -21,7 +21,10 @@ def index(request):
     elif datetime.now() >= STOP_TIME:
         return render(request, 'late.html')
 
-    questions = Assignments.objects.get(user=request.user.id).questions.all()
+    try:
+        questions = Assignments.objects.get(user=request.user.id).questions.all()
+    except Exception:
+        questions = []
     questions = [(
         pers(str(i + 1)),
         q.text,
