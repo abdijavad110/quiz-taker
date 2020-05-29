@@ -59,17 +59,16 @@ def signup(request):
             user.first_name = f_name
             user.save()
 
-            _assign_questions(user.id)
+            _assign_questions(user.id, list(range(10, 13)))
             auth_login(request, user)
             return redirect('/')
     return render(request, 'registration/signup.html', {'errors': errors})
 
 
-def _assign_questions(user_id):
+def _assign_questions(user_id, types):
     assignment = Assignments(user=User.objects.get(id=user_id))
     assignment.save()
 
-    types = list(range(10, 13))
     shuffle(types)
 
     for i in types:
