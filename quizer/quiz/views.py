@@ -1,24 +1,25 @@
 from django.shortcuts import render, redirect
-from .models import Question, Assignments
+from .models import Assignments
 from persian import convert_en_numbers as pers
-from .conf import get_time
 from .models import Answer
-from datetime import datetime
+from django.utils import timezone as tz
+from controller.models import Time
 
 
 # Create your views here.
 def index(request):
-    START_TIME, STOP_TIME = get_time()
+    t = Time.objects.get(active=True)
+    START_TIME, STOP_TIME = t.start, t.stop
     if not request.user.is_authenticated:
         return redirect('login')
 
-    if datetime.now() < START_TIME:
-        diff = START_TIME - datetime.now()
+    if tz.now() < START_TIME:
+        diff = START_TIME - tz.now()
         diff = int(diff.total_seconds())
         minutes = diff // 60
         seconds = diff % 60
         return render(request, 'soon.html', {'min': minutes, 'sec': seconds})
-    elif datetime.now() >= STOP_TIME:
+    elif tz.now() >= STOP_TIME:
         return render(request, 'late.html')
 
     try:
@@ -42,8 +43,9 @@ def index(request):
 
 
 def upload(request):
-    START_TIME, STOP_TIME = get_time()
-    if datetime.now() > STOP_TIME:
+    t = Time.objects.get(active=True)
+    STOP_TIME = t.stop
+    if tz.now() > STOP_TIME:
         return render(request, 'late.html')
 
     if request.method == 'POST':
@@ -65,8 +67,9 @@ def upload(request):
 
 
 def delete(request):
-    START_TIME, STOP_TIME = get_time()
-    if datetime.now() > STOP_TIME:
+    t = Time.objects.get(active=True)
+    STOP_TIME = t.stop
+    if tz.now() > STOP_TIME:
         return render(request, 'late.html')
 
     if request.method == 'POST':

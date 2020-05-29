@@ -1,10 +1,10 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.db.models import Count
 from django.contrib.auth.models import User
-from quiz.conf import set_new_time, get_time
 from datetime import datetime
 from quiz.models import Question, Assignments
 from quizer.views import _assign_questions
+from .models import Time
 
 
 def index(request):
@@ -18,17 +18,18 @@ def time(request):
     if not request.user.is_staff:
         return HttpResponse("Restricted Access !!!")
 
+    t = Time.objects.get(active=True)
     if request.method == 'POST':
         args = request.POST
 
-        set_new_time(
-            datetime(int(args['start_year']), int(args['start_month']), int(args['start_day']), int(args['start_hour']),
-                     int(args['start_minute'])),
-            datetime(int(args['stop_year']), int(args['stop_month']), int(args['stop_day']), int(args['stop_hour']),
-                     int(args['stop_minute'])))
+        t.start = datetime(int(args['start_year']), int(args['start_month']), int(args['start_day']),
+                           int(args['start_hour']), int(args['start_minute']))
+        t.stop = datetime(int(args['stop_year']), int(args['stop_month']), int(args['stop_day']),
+                          int(args['stop_hour']), int(args['stop_minute']))
+        t.save()
         return redirect('/control/')
     else:
-        start, stop = get_time()
+        start, stop = t.start, t.stop
         return render(request, 'control/time.html',
                       {'start_year': start.year, 'start_month': start.month, 'start_day': start.day,
                        'start_hour': start.hour, 'start_minute': start.minute, 'stop_year': stop.year,
