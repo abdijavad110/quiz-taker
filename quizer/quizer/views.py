@@ -59,6 +59,7 @@ def signup(request):
             user.first_name = f_name
             user.save()
 
+            _assign_questions(user.id, [4, 5])
             auth_login(request, user)
             return redirect('/')
     return render(request, 'registration/signup.html', {'errors': errors})

@@ -2,9 +2,39 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.db.models import Count
 from django.contrib.auth.models import User
 from datetime import datetime
-from quiz.models import Question, Assignments
 from quizer.views import _assign_questions
+from quiz.models import Assignments, Question, Answer
 from .models import Time
+from persian import convert_en_numbers as pers
+
+
+def grade(request):
+    if not request.user.is_staff:
+        return redirect('login')
+
+    try:
+        questions = Assignments.objects.get(user=request.POST['user']).questions.all()
+    except Exception:
+        questions = []
+    users = [(u.id, u.username, u.first_name, u.last_name) for u in User.objects.all()]
+    try:
+        user = User.objects.get(id=int(request.POST['user'])) if request.POST['user'] is not None else None
+    except Exception:
+        user = None
+    questions = [(
+        pers(str(i + 1)),
+        q.text,
+        (q.pic.url if q.pic.name != '' else ''),
+        ("w3-light-grey" if i % 2 else ""),
+        q.id,
+    ) for i, q in enumerate(questions)]
+    answers = [
+        (i + 1, ans.id, ans.file.url)
+        for i, ans in
+        enumerate(Answer.objects.filter(responder=request.user).all())
+    ]
+    context = {'questions': questions, 'answers': answers, 'users': users, 'user': user}
+    return render(request, 'control/grading.html', context)
 
 
 def index(request):
