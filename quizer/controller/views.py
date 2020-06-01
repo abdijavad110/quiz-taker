@@ -28,11 +28,14 @@ def grade(request):
         ("w3-light-grey" if i % 2 else ""),
         q.id,
     ) for i, q in enumerate(questions)]
-    answers = [
-        (i + 1, ans.id, ans.file.url)
-        for i, ans in
-        enumerate(Answer.objects.filter(responder=request.user).all())
-    ]
+    try:
+        answers = [
+            (i + 1, ans.id, ans.file.url)
+            for i, ans in
+            enumerate(Answer.objects.filter(responder=user.id).all())
+        ]
+    except:
+        answers = []
     context = {'questions': questions, 'answers': answers, 'users': users, 'user': user}
     return render(request, 'control/grading.html', context)
 
